@@ -9,5 +9,8 @@ public class GuidemeActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        /**
+         * test commit
+         */
     }
 }
