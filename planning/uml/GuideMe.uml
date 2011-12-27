@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_FOIDUTCsEeGQw4WgvbXctQ" name="model">
   <packagedElement xmi:type="uml:Package" xmi:id="_JYBQ4DCsEeGQw4WgvbXctQ" name="GuideMe">
-    <packagedElement xmi:type="uml:UseCase" xmi:id="_cmMV8DCsEeGQw4WgvbXctQ" name="UC-GM-01 Haltstellen innerhalb des Raduis ermitteln und herunterladen">
+    <packagedElement xmi:type="uml:UseCase" xmi:id="_cmMV8DCsEeGQw4WgvbXctQ" name="UC-GM-01 Haltstellen innerhalb des Radius ermitteln und herunterladen">
       <extend xmi:id="_vH7WUDCtEeGQw4WgvbXctQ" extendedCase="_6_LGkDCsEeGQw4WgvbXctQ" extensionLocation="_vOvwADCtEeGQw4WgvbXctQ"/>
     </packagedElement>
     <packagedElement xmi:type="uml:UseCase" xmi:id="_wJwcMDCsEeGQw4WgvbXctQ" name="UC-GM-02 Aktuellen Standort ermitteln"/>
@@ -41,6 +41,17 @@
     <ownedEnd xmi:id="_p9lYZDCtEeGQw4WgvbXctQ" name="aktuellen standort ermitteln" type="_wJwcMDCsEeGQw4WgvbXctQ" association="_p9lYYDCtEeGQw4WgvbXctQ">
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_p9lYZTCtEeGQw4WgvbXctQ" value="1"/>
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_p9lYZjCtEeGQw4WgvbXctQ" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_uwDksDC0EeGareYmhoGn2A" name="«Actor» GPS-System"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_xMmfoDC0EeGareYmhoGn2A" name="A_«actor» gps-system_uc-gm-02 aktuellen standort ermitteln" memberEnd="_xMnGsDC0EeGareYmhoGn2A _xMnGszC0EeGareYmhoGn2A">
+    <ownedEnd xmi:id="_xMnGsDC0EeGareYmhoGn2A" name="«actor» gps-system" type="_uwDksDC0EeGareYmhoGn2A" association="_xMmfoDC0EeGareYmhoGn2A">
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xMnGsTC0EeGareYmhoGn2A" value="1"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xMnGsjC0EeGareYmhoGn2A" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_xMnGszC0EeGareYmhoGn2A" name="uc-gm-02 aktuellen standort ermitteln" type="_wJwcMDCsEeGQw4WgvbXctQ" association="_xMmfoDC0EeGareYmhoGn2A">
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xMnGtDC0EeGareYmhoGn2A" value="1"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xMnGtTC0EeGareYmhoGn2A" value="1"/>
     </ownedEnd>
   </packagedElement>
 </uml:Model>
