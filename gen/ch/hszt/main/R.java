@@ -11,8 +11,8 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int info=0x7f020000;
-        public static final int train=0x7f020001;
+        public static final int blue_marker_a=0x7f020000;
+        public static final int info=0x7f020001;
         public static final int worldmap=0x7f020002;
     }
     public static final class id {

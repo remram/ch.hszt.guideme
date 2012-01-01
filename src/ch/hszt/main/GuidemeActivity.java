@@ -87,7 +87,7 @@ public class GuidemeActivity extends MapActivity {
 		textView = (TextView) findViewById(R.id.gps_pos);
 
 		overlayList = mapView.getOverlays();
-		drawable = this.getResources().getDrawable(R.drawable.train);
+		drawable = this.getResources().getDrawable(R.drawable.blue_marker_a);
 		itemizedoverlay = new GooglePlaceOverlay(drawable);
 	}
 
