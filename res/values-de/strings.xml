@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="position">Meine aktuelle Position</string>
+    <string name="app_name">GuideMe</string>
+    <string name="alert">GPS ist nicht aktiviert</string>
+    <string name="message">Wollen Sie in den Einstellungen das GPS aktivieren?</string>
+    <string name="infoDialog">Information</string>
+    <string name="info">Haltestellen in der Nähe</string>
+    <string name="request">Haltestellen suchen</string>
+   <string name="fail">keine Daten verfügbar</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+
+</resources>

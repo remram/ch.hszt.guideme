@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, GuidemeActivity!</string>
-    <string name="app_name">guideme</string>
+    <string name="position">My Actual Position</string>
+    <string name="app_name">GuideMe</string>    
+    <string name="alert">GPS is not enabeld</string>
+    <string name="message">Would you like to go the location settings and enable GPS?</string>
+    <string name="infoDialog">Information</string>
+    <string name="info">public transport stations nearby </string>
+    <string name="request">search public transport station</string>
+    <string name="fail">no data available</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
