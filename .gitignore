@@ -2,4 +2,6 @@
 .project
 .settings/
 bin/
-
+project.properties
+src/ch/hszt/controller/PlacesKeys.java
+res/layout/main.xml
