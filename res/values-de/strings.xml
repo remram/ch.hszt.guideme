@@ -5,10 +5,17 @@
     <string name="app_name">GuideMe</string>
     <string name="alert">GPS ist nicht aktiviert</string>
     <string name="message">Wollen Sie in den Einstellungen das GPS aktivieren?</string>
+    
     <string name="infoDialog">Information</string>
-    <string name="info">Haltestellen in der Nähe</string>
+    <string name="info">Info</string>
+    
     <string name="request">Haltestellen suchen</string>
-   <string name="fail">keine Daten verfügbar</string>
+    
+    <string name="network_failure">Keine Verbindung ins Internet möglich. Bitte überprüfen Sie ob Wifi oder Mobile Net aktiv ist.</string>
+    <string name="no_connection">Keine Daten verfügbar</string>
+    <string name="no_places">Es wurden keine Haltestellen gefunden. Bitte später nochmals suchen</string>
+    <string name="no_ways_available">Es konnte(n) keine Route(n) berechnet werden. Möglicher Grund: Keine Weg Punkte von Google verfögbar</string>
+
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
 
