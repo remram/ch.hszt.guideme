@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import ch.hszt.model.Location;
 
+/**
+ * class to decode the polylines from google places
+ * @author egi
+ *
+ */
 public class PolylineDecoder {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

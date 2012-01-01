@@ -14,7 +14,10 @@ import org.json.JSONObject;
 
 import ch.hszt.model.Place;
 
-
+/**
+ * @author egon
+ *
+ */
 public class GooglePlaceRequest {
 	private Place place;
 	private String urlString;
@@ -82,9 +85,7 @@ public class GooglePlaceRequest {
 			}
 
 			return placeList;	
-
-
-
+			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

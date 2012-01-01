@@ -13,6 +13,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * @author egon
+ *
+ */
 public class GoogleDirectionsRequest {
 	private int distance;
 	private double fromLat;
@@ -98,6 +102,4 @@ public class GoogleDirectionsRequest {
 	public int getDistance() {
 		return distance;
 	}
-	
 }
-

@@ -44,11 +44,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-
+/**
+ * @author egon
+ *
+ */
 public class GuidemeActivity extends MapActivity {
+	/**
+	 * initial parameter
+	 */
+	
 	private final int CURRENT_MESSAGE_INFO = 0;
 
-	private boolean publicStationOnly = true;
+	private boolean publicStationOnly = false;
 
 	private int distance = 0;	
 
@@ -239,9 +246,6 @@ public class GuidemeActivity extends MapActivity {
 		}
 	};
 	
-
-
-
 	/**
 	 * onPause methode
 	 */

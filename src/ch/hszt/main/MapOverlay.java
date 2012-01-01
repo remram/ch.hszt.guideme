@@ -1,17 +1,18 @@
 package ch.hszt.main;
 
-
 import java.util.ArrayList;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 
-
+/**
+ * @author egon
+ *
+ */
 public class MapOverlay extends com.google.android.maps.Overlay{
 	private MapView mapView = null;
 	private ArrayList<GeoPoint> geoPointList;

@@ -1,5 +1,9 @@
 package ch.hszt.model;
 
+/**
+ * @author egon
+ *
+ */
 public class Location {
 	private double latitude;
 	private double longitude;

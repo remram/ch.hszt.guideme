@@ -7,6 +7,10 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 
+/**
+ * @author egon
+ *
+ */
 public class MyCustomLocationOverlay extends MyLocationOverlay {
 	private MapView mapView = null;
 

@@ -1,5 +1,9 @@
 package ch.hszt.model;
 
+/**
+ * @author egon
+ *
+ */
 public class Place {
 
 	private String name;
