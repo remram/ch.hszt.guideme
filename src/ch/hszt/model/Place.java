@@ -1,4 +1,5 @@
 package ch.hszt.model;
+
 public class Place {
 
 	private String name;
@@ -8,7 +9,6 @@ public class Place {
 	private double longitude;
 
 	private double latitude;
-
 
 	public String getName() {
 		return name;
@@ -44,6 +44,7 @@ public class Place {
 
 	@Override
 	public String toString() {
-		return String.format("name:%s,vicinity:%s,latitude:%f,longitude:%f", name, vicinity, latitude, longitude);
+		return String.format("name:%s,vicinity:%s,latitude:%f,longitude:%f",
+				name, vicinity, latitude, longitude);
 	}
 }
