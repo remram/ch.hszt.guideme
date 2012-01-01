@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 import ch.hszt.main.R;
@@ -12,6 +13,7 @@ import ch.hszt.controller.GooglePlaceRequest;
 import ch.hszt.controller.PolylineDecoder;
 import ch.hszt.model.Location;
 import ch.hszt.model.Place;
+
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -28,6 +30,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -36,27 +39,50 @@ import android.widget.TextView;
 
 
 public class GuidemeActivity extends MapActivity {
-	private int zoomLevel = 19; 
+	private final int CURRENT_MESSAGE_INFO = 0;
+	
+	private boolean publicStationOnly = false;
+
+	private int distance = 0;	
+
+	private int foundPoints = 0;
+
+	private int radius = 60;
+
+	private int zoomLevel = 17;
+
+	private double latitude = 0.0;
+
+	private double longitude = 0.0;
+
 	private MapView mapView = null;
+
 	private MapController mapController = null;
+
 	private MyLocationOverlay whereAmI = null;
-	private LocationManager locationMgr = null;
-	private Button placeRequst;
-	private TextView textView;
-	private double latitude = 47.434772;
-	private double longitude = 8.571534;
-	private final int CURRENT_GPS_INFO = 0;
-	private String location = null;
-	private ArrayList<Place> placeList = null;
-	private ArrayList<GeoPoint> gpList = null;
+
 	private List<Overlay> overlayList;
+
 	private Drawable drawable;
+
 	private GooglePlaceOverlay itemizedoverlay ;
+
 	private MapOverlay mapOverlay;
-	private int distance;
-	@SuppressWarnings("unused")
-	private int foundPoints;
+
+	private LocationManager locationMgr = null;
+
+	private Button placeRequst;
+
+	private TextView textView;
+
+	private String message = null;
+
+	private ArrayList<Place> placeList = null;
+
+	private ArrayList<GeoPoint> gpList = null;
+
 	private TreeMap<Integer, ArrayList<GeoPoint>> sortedRoutes;
+
 	private ArrayList<GeoPoint> geoPointList;
 
 	/** Called when the activity is first created. */
@@ -135,59 +161,82 @@ public class GuidemeActivity extends MapActivity {
 	 * if button has been pushed, perform all steps in onClick method
 	 */
 	View.OnClickListener onclickListener = new View.OnClickListener() {
-		@SuppressWarnings({"rawtypes", "unchecked" })
+		@SuppressWarnings({"rawtypes", "unchecked", "unused" })
 		@Override
+
 		public void onClick(View v) {
-			System.out.println(whereAmI.getMyLocation());
-			placeList = searchPlaces();
+			mapView.getOverlays().clear();
+			drawable = mapView.getResources().getDrawable(R.drawable.blue_marker_a);
+			itemizedoverlay = new GooglePlaceOverlay(drawable);
+			mapView.getOverlays().add(whereAmI);
 
-			if (!(getPlaces().equals(null))) {
-				location = getPlaces();
-			}
+			if (! (checkNetworkStatus()) ) {
+				setMessage(getString(R.string.network_failure));
+				showDialog(CURRENT_MESSAGE_INFO);
+			}			
 			else {
-				location = getString(R.string.fail);
-			}
 
-			latitude = whereAmI.getMyLocation().getLatitudeE6()/1E6;
-			longitude = whereAmI.getMyLocation().getLongitudeE6()/1E6;
-			showDialog(CURRENT_GPS_INFO);
-			if (! (getPoints().equals(null))) {
-				gpList = getPoints();
-				for (GeoPoint point : gpList) {		
-					GeoPoint geoPoint = new GeoPoint(point.getLatitudeE6(),point.getLongitudeE6());	
-					OverlayItem overlayitem = new OverlayItem(geoPoint, "" ,"");
-					itemizedoverlay.addOverlay(overlayitem);
-					overlayList.add(itemizedoverlay);
-					geoPointList = getWayPoints(latitude, longitude, (point.getLatitudeE6()/1E6), (point.getLongitudeE6()/1E6));					
-					sortedRoutes.put(distance, geoPointList);
+				placeList = searchPlaces();
+				if (placeList.equals(null)) {
+					setMessage(getString(R.string.no_connection));	// in case of no connection to google is possible
+					showDialog(CURRENT_MESSAGE_INFO);
 				}
-				
-				int counter = 0;
-				Collection collection = sortedRoutes.values();
-				Iterator iterator = collection.iterator();
-				while (iterator.hasNext()) {
-					mapOverlay = new MapOverlay(geoPointList, mapView);
-					geoPointList = (ArrayList<GeoPoint>) iterator.next();
-					if (counter == 0) {
-						mapOverlay.setColor(Color.RED);
+
+				else {
+					setMessage(getStringFromAllFountPlaces());	// only for dialog info requierd					
+					if (getMessage().equals(null)) {
+						setMessage(getString(R.string.no_places));	// in case no places had been found
 					}
-					else if (counter == 1) {
-						mapOverlay.setColor(Color.YELLOW);
+					
+					latitude = whereAmI.getMyLocation().getLatitudeE6()/1E6;
+					longitude = whereAmI.getMyLocation().getLongitudeE6()/1E6;
+					gpList = getAllFoundPlaces();
+					if (! (gpList.equals(null)) ) {
+						for (GeoPoint point : gpList) {		
+							GeoPoint geoPoint = new GeoPoint(point.getLatitudeE6(),point.getLongitudeE6());	
+							OverlayItem overlayitem = new OverlayItem(geoPoint, "" ,"");
+							itemizedoverlay.addOverlay(overlayitem);
+							overlayList.add(itemizedoverlay);
+							geoPointList = getWayPoints(latitude, longitude, (point.getLatitudeE6()/1E6), (point.getLongitudeE6()/1E6));					
+							sortedRoutes.put(distance, geoPointList);
+						}
+
+						int counter = 0;
+						Collection collection = sortedRoutes.values();
+						Iterator iterator = collection.iterator();	
+						Set keySet = sortedRoutes.keySet();
+						Integer [] keys = new Integer [keySet.size()];
+						keySet.toArray(keys);
+						for (int i = 0; i < keys.length; i++) {
+							geoPointList = sortedRoutes.get(keys[i]);
+							if (counter == 0) {
+								mapOverlay = new MapOverlay(geoPointList, Color.GREEN, mapView );
+							}
+
+							else if (counter == 1) {
+								mapOverlay = new MapOverlay(geoPointList, Color.rgb(255, 165, 0), mapView);
+							}		
+
+							else {
+								mapOverlay = new MapOverlay(geoPointList, Color.RED, mapView);
+							}
+
+							mapView.getOverlays().add(mapOverlay);
+							counter++;
+						}
+
 					}
-					else if (counter == 2) {
-						mapOverlay.setColor(Color.GREEN);
-					}			
+
 					else {
-						mapOverlay.setColor(Color.CYAN);
+						setMessage(getString(R.string.no_ways_available));	// in case no ways could be calculated. No Waypoints availabe..
+						showDialog(CURRENT_MESSAGE_INFO);
 					}
-					mapView.getOverlays().add(mapOverlay);
-					mapView.invalidate();
-					counter++;
 				}
 			}
-
 		}
 	};
+	
+	
 
 	/**
 	 * onPause methode
@@ -220,10 +269,10 @@ public class GuidemeActivity extends MapActivity {
 	 */
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
-		case CURRENT_GPS_INFO:
+		case CURRENT_MESSAGE_INFO:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(R.string.info);
-			builder.setMessage(location);
+			builder.setMessage(getMessage());
 			builder.setCancelable(false);
 			builder.setPositiveButton("OK",
 					new DialogInterface.OnClickListener() {
@@ -285,12 +334,11 @@ public class GuidemeActivity extends MapActivity {
 	 * Methode to get inforsmation about places
 	 * @return
 	 */
-	private String getPlaces() {
+	private String getStringFromAllFountPlaces() {
 		StringBuilder sb = new StringBuilder();
-		for (Place place : this.placeList) {
-			sb.append(place.getName()+ " " + place.getVicinity()  + " " + place.getLatitude() + " " + place.getLongitude() +"\n" );
+		for (Place place : placeList) {
+			sb.append(place.getName()+ " " + place.getVicinity() + "\n" );
 		}	
-		
 		return sb.toString();
 	}
 
@@ -298,12 +346,57 @@ public class GuidemeActivity extends MapActivity {
 	 * create an ArrayList<GeoPoint> from all places in ArrayList<Place>
 	 * @return
 	 */
-	private ArrayList<GeoPoint> getPoints() {
+	private ArrayList<GeoPoint> getAllFoundPlaces() {
 		ArrayList<GeoPoint> gplist = new ArrayList<GeoPoint>();
 		for (Place place : this.placeList) {
-			gplist.add(new GeoPoint((int) (place.getLatitude()*1E6),(int) (place.getLongitude()*1E6)));
+	
+			if (publicStationOnly) {
+				if (place.getVicinity().equals("Switzerland")) {
+					gplist.add(new GeoPoint((int) (place.getLatitude()*1E6),(int) (place.getLongitude()*1E6)));
+				}
+			}
+			else {
+				gplist.add(new GeoPoint((int) (place.getLatitude()*1E6),(int) (place.getLongitude()*1E6)));
+			}
 		}
 		this.foundPoints = this.placeList.size();
 		return gplist;
+	}
+	
+	/**
+	 * check if wifi or mobile lan is available. Retrun true if Wifi is available if it isnt, it check if mobile Lan
+	 * is availabe. if both are disabled it return false.
+	 * @return
+	 */
+	public boolean checkNetworkStatus() {
+		ConnectivityManager connMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		if (connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {	
+			return true;
+		}
+
+		else if ( connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()) {
+			return true;
+		}
+
+		else {
+			return false;			
+		}
+	}
+	
+	/**
+	 * setter for dialog message 
+	 * @param message
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * getter for dialog message
+	 * @return
+	 */
+	public String getMessage() {
+		return this.message;
 	}
 }

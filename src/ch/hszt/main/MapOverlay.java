@@ -15,10 +15,11 @@ import com.google.android.maps.MapView;
 public class MapOverlay extends com.google.android.maps.Overlay{
 	private MapView mapView = null;
 	private ArrayList<GeoPoint> geoPointList;
-	private int color = Color.GREEN;
+	private int color;
 	
-	public MapOverlay(ArrayList<GeoPoint> geoPointList, MapView mapView) {
-			this.geoPointList = geoPointList;	
+	public MapOverlay(ArrayList<GeoPoint> geoPointList, int color, MapView mapView) {
+			this.geoPointList = geoPointList;
+			this.color = color;
 			
 			int moveToLat = (this.geoPointList.get(0).getLatitudeE6() + 
 					( this.geoPointList.get(this.geoPointList.size() - 1).getLatitudeE6() - this.geoPointList.get(0).getLatitudeE6() ) / 2);
@@ -29,10 +30,6 @@ public class MapOverlay extends com.google.android.maps.Overlay{
 			GeoPoint moveTo = new GeoPoint(moveToLat, moveToLong);
 			this.mapView = mapView;
 			this.mapView.getController().animateTo(moveTo);
-//			MapController mapController = mapView.getController();
-//			mapController.animateTo(moveTo);
-//			mapController.setZoom(18);
-
 	}
 
 	@Override

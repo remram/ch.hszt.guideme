@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="position">My Actual Position</string>
-    <string name="app_name">GuideMe</string>    
+    <string name="app_name">GuideMe</string>
     <string name="alert">GPS is not enabeld</string>
     <string name="message">Would you like to go the location settings and enable GPS?</string>
+
     <string name="infoDialog">Information</string>
-    <string name="info">public transport stations nearby </string>
+    <string name="info">info </string>
+    
+    
     <string name="request">search public transport station</string>
-    <string name="fail">no data available</string>
+    <string name="network_failure">no connection to internet possible. Please check if Wifi or mobile Net is activated.</string>
+    <string name="no_connection">no data available</string>
+    <string name="no_ways_available">the ways could not be calculated. Reason could be: No waypoints from google availabe..</string>
+    <string name="no_places">no places has been found</string>
+    
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    
 </resources>
