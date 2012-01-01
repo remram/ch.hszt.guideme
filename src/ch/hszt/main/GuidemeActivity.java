@@ -1,5 +1,12 @@
 package ch.hszt.main;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -40,8 +47,8 @@ import android.widget.TextView;
 
 public class GuidemeActivity extends MapActivity {
 	private final int CURRENT_MESSAGE_INFO = 0;
-	
-	private boolean publicStationOnly = false;
+
+	private boolean publicStationOnly = true;
 
 	private int distance = 0;	
 
@@ -170,12 +177,10 @@ public class GuidemeActivity extends MapActivity {
 			itemizedoverlay = new GooglePlaceOverlay(drawable);
 			mapView.getOverlays().add(whereAmI);
 
-			if (! (checkNetworkStatus()) ) {
-				setMessage(getString(R.string.network_failure));
+			if (! (checkNetworkStatus()) ) {	
 				showDialog(CURRENT_MESSAGE_INFO);
 			}			
 			else {
-
 				placeList = searchPlaces();
 				if (placeList.equals(null)) {
 					setMessage(getString(R.string.no_connection));	// in case of no connection to google is possible
@@ -236,7 +241,8 @@ public class GuidemeActivity extends MapActivity {
 		}
 	};
 	
-	
+
+
 
 	/**
 	 * onPause methode
@@ -315,7 +321,7 @@ public class GuidemeActivity extends MapActivity {
 		ArrayList<GeoPoint> geoPointList = new ArrayList<GeoPoint>();
 		PolylineDecoder pd = new PolylineDecoder();
 		ArrayList<String> polylinepoints  = pgdr.searchGoogleDirections();
-		
+
 
 		for (String string : polylinepoints) {
 			locationList.addAll(pd.decodePoly(string));
@@ -324,9 +330,9 @@ public class GuidemeActivity extends MapActivity {
 		for (Location location : locationList) {
 			geoPointList.add(new GeoPoint( ((int) location.getLatitude()), ((int) location.getLongitude())));
 		}
-				
+
 		this.distance = pgdr.getDistance();
-		
+
 		return geoPointList;		
 	}
 
@@ -349,7 +355,7 @@ public class GuidemeActivity extends MapActivity {
 	private ArrayList<GeoPoint> getAllFoundPlaces() {
 		ArrayList<GeoPoint> gplist = new ArrayList<GeoPoint>();
 		for (Place place : this.placeList) {
-	
+
 			if (publicStationOnly) {
 				if (place.getVicinity().equals("Switzerland")) {
 					gplist.add(new GeoPoint((int) (place.getLatitude()*1E6),(int) (place.getLongitude()*1E6)));
@@ -362,7 +368,7 @@ public class GuidemeActivity extends MapActivity {
 		this.foundPoints = this.placeList.size();
 		return gplist;
 	}
-	
+
 	/**
 	 * check if wifi or mobile lan is available. Retrun true if Wifi is available if it isnt, it check if mobile Lan
 	 * is availabe. if both are disabled it return false.
@@ -372,18 +378,51 @@ public class GuidemeActivity extends MapActivity {
 		ConnectivityManager connMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
 		if (connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {	
+			try {
+				InetAddress addr = InetAddress.getByName("google.com");
+				int port = 80;
+				SocketAddress sockaddr = new InetSocketAddress(addr, port);
+				Socket socket = new Socket();
+				// This method will block no more than timeoutMs.
+				// If the timeout occurs, SocketTimeoutException is thrown.
+				int timeoutMs = 1000;   // 1 second
+				socket.connect(sockaddr, timeoutMs);
+			} catch (UnknownHostException e) {
+				e.getStackTrace();
+			} catch (SocketTimeoutException e) {
+				setMessage(getString(R.string.no_connection));
+				return false;
+			} catch (IOException e) {
+			}
 			return true;
 		}
 
 		else if ( connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected()) {
+
+			try {
+				InetAddress addr = InetAddress.getByName("google.com");
+				int port = 80;
+				SocketAddress sockaddr = new InetSocketAddress(addr, port);
+				Socket socket = new Socket();
+				// This method will block no more than timeoutMs.
+				// If the timeout occurs, SocketTimeoutException is thrown.
+				int timeoutMs = 1000;   // 1 second
+				socket.connect(sockaddr, timeoutMs);
+			} catch (UnknownHostException e) {
+				e.getStackTrace();
+			} catch (SocketTimeoutException e) {
+				setMessage(getString(R.string.no_connection));
+				return false;
+			} catch (IOException e) {
+			}
 			return true;
 		}
-
 		else {
+			setMessage(getString(R.string.network_failure));
 			return false;			
 		}
 	}
-	
+
 	/**
 	 * setter for dialog message 
 	 * @param message
