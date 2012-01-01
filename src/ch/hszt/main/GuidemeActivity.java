@@ -54,8 +54,6 @@ public class GuidemeActivity extends MapActivity {
 
 	private int foundPoints = 0;
 
-	private int radius = 60;
-
 	private int zoomLevel = 17;
 
 	private double latitude = 0.0;
