@@ -1,6 +1,5 @@
 package ch.hszt.controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -24,6 +23,13 @@ public class GoogleDirectionsRequest {
 	private double toLat;
 	private double toLng;
 	
+	/**
+	 * Overwrited constructor
+	 * @param fromLat
+	 * @param fromLng
+	 * @param toLat
+	 * @param toLng
+	 */
 	public GoogleDirectionsRequest(double fromLat, double fromLng, double toLat, double toLng) {
 		this.fromLat = fromLat;
 		this.fromLng = fromLng;
@@ -67,21 +73,13 @@ public class GoogleDirectionsRequest {
 				}
 			}	
 			return polPoints;
-		
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
+		} catch (MalformedURLException e) {	
+			return null;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 	
 	/**
@@ -99,6 +97,10 @@ public class GoogleDirectionsRequest {
 		return urlString;
 	}
 	
+	/**
+	 * getter of distance for each object of this instance
+	 * @return
+	 */
 	public int getDistance() {
 		return distance;
 	}

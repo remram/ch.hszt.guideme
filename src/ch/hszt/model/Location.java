@@ -7,7 +7,12 @@ package ch.hszt.model;
 public class Location {
 	private double latitude;
 	private double longitude;
-
+	
+	/**
+	 * Overwrited constructor.
+	 * @param latitude
+	 * @param longitude
+	 */
 	public Location(Double latitude, Double longitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;

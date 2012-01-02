@@ -23,7 +23,7 @@ public class GooglePlaceOverlay extends com.google.android.maps.ItemizedOverlay 
 	private ArrayList<OverlayItem> overlays = new ArrayList<OverlayItem>();
 
 	/**
-	 * 
+	 * overwrited constructor; set the default marker
 	 * @param defaultMarker
 	 */
 	public GooglePlaceOverlay(Drawable defaultMarker) {
@@ -31,7 +31,7 @@ public class GooglePlaceOverlay extends com.google.android.maps.ItemizedOverlay 
 	}
 
 	/**
-	 * 
+	 * overwrited constructor; set the default marker in the current context;
 	 * @param defaultMarker
 	 * @param context
 	 */
@@ -47,8 +47,6 @@ public class GooglePlaceOverlay extends com.google.android.maps.ItemizedOverlay 
 	protected OverlayItem createItem(int i) {
 		return overlays.get(i);
 	}
-
-
 	
 	/**
 	 * set getSize of overlay

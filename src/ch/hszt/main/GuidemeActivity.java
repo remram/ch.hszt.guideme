@@ -49,16 +49,17 @@ import android.widget.TextView;
  *
  */
 public class GuidemeActivity extends MapActivity {
+	
 	/**
 	 * initial parameter
-	 */
-	
+	 */	
 	private final int CURRENT_MESSAGE_INFO = 0;
 
-	private boolean publicStationOnly = false;
+	private boolean publicStationOnly = true;
 
 	private int distance = 0;	
 
+	@SuppressWarnings("unused")
 	private int foundPoints = 0;
 
 	private int zoomLevel = 17;
@@ -97,7 +98,9 @@ public class GuidemeActivity extends MapActivity {
 
 	private ArrayList<GeoPoint> geoPointList;
 
-	/** Called when the activity is first created. */
+	/**
+	 * Called when the activity is first created.
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -130,7 +133,7 @@ public class GuidemeActivity extends MapActivity {
 	}
 
 	/**
-	 * onResume methode
+	 * Called when the activity is called from background to foreground
 	 */
 	@Override
 	public void onResume() {
@@ -303,7 +306,7 @@ public class GuidemeActivity extends MapActivity {
 		try {
 			this.placeList = new GooglePlaceRequest(this.latitude, this.longitude).search();
 		} catch (Exception e) {
-			e.printStackTrace();
+			return null;
 		}
 		return placeList;
 	}
@@ -323,7 +326,6 @@ public class GuidemeActivity extends MapActivity {
 		ArrayList<GeoPoint> geoPointList = new ArrayList<GeoPoint>();
 		PolylineDecoder pd = new PolylineDecoder();
 		ArrayList<String> polylinepoints  = pgdr.searchGoogleDirections();
-
 
 		for (String string : polylinepoints) {
 			locationList.addAll(pd.decodePoly(string));
@@ -390,11 +392,12 @@ public class GuidemeActivity extends MapActivity {
 				int timeoutMs = 1000;   // 1 second
 				socket.connect(sockaddr, timeoutMs);
 			} catch (UnknownHostException e) {
-				e.getStackTrace();
+				return false;
 			} catch (SocketTimeoutException e) {
 				setMessage(getString(R.string.no_connection));
 				return false;
 			} catch (IOException e) {
+				return false;
 			}
 			return true;
 		}
@@ -411,11 +414,12 @@ public class GuidemeActivity extends MapActivity {
 				int timeoutMs = 1000;   // 1 second
 				socket.connect(sockaddr, timeoutMs);
 			} catch (UnknownHostException e) {
-				e.getStackTrace();
+				return false;
 			} catch (SocketTimeoutException e) {
 				setMessage(getString(R.string.no_connection));
 				return false;
 			} catch (IOException e) {
+				return false;
 			}
 			return true;
 		}

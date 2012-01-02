@@ -18,6 +18,12 @@ public class MapOverlay extends com.google.android.maps.Overlay{
 	private ArrayList<GeoPoint> geoPointList;
 	private int color;
 	
+	/**
+	 * Overwrited constructor. create an instance of this class with an ArrayList<GeoPoint> inside the mapView 
+	 * @param geoPointList
+	 * @param color
+	 * @param mapView
+	 */
 	public MapOverlay(ArrayList<GeoPoint> geoPointList, int color, MapView mapView) {
 			this.geoPointList = geoPointList;
 			this.color = color;
@@ -40,6 +46,11 @@ public class MapOverlay extends com.google.android.maps.Overlay{
 		return true;
 	}
 
+	/**
+	 * Draw methode to draw the path
+	 * @param mapView
+	 * @param canvas
+	 */
 	public void drawPath(MapView mapView, Canvas canvas) {
 		int x1 = -1, y1 = -1, x2 = -1, y2 = -1;
 		Paint paint = new Paint();
@@ -61,7 +72,4 @@ public class MapOverlay extends com.google.android.maps.Overlay{
 		}
 	}
 	
-	public void setColor(int color) {
-		this.color = color;
-	}
 }
