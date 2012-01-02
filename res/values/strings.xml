@@ -9,7 +9,7 @@
     <string name="infoDialog">Information</string>
     <string name="info">info </string>
     
-    
+    <string name="network_alert">LAN is not enabeld</string>
     <string name="request">search public transport station</string>
     <string name="network_failure">no connection to internet possible. Please check if Wifi or mobile Net is activated.</string>
     <string name="no_connection">no data available</string>

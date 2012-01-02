@@ -11,6 +11,7 @@
     
     <string name="request">Haltestellen suchen</string>
     
+    <string name="network_alert">LAN ist nicht verfügbar</string>
     <string name="network_failure">Keine Verbindung ins Internet möglich. Bitte überprüfen Sie ob Wifi oder Mobile Net aktiv ist.</string>
     <string name="no_connection">Keine Daten verfügbar</string>
     <string name="no_places">Es wurden keine Haltestellen gefunden. Bitte später nochmals suchen</string>

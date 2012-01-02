@@ -30,13 +30,14 @@ public final class R {
         public static final int info=0x7f040005;
         public static final int infoDialog=0x7f040004;
         public static final int message=0x7f040003;
-        public static final int network_failure=0x7f040007;
-        public static final int no=0x7f04000c;
-        public static final int no_connection=0x7f040008;
-        public static final int no_places=0x7f04000a;
-        public static final int no_ways_available=0x7f040009;
+        public static final int network_alert=0x7f040006;
+        public static final int network_failure=0x7f040008;
+        public static final int no=0x7f04000d;
+        public static final int no_connection=0x7f040009;
+        public static final int no_places=0x7f04000b;
+        public static final int no_ways_available=0x7f04000a;
         public static final int position=0x7f040000;
-        public static final int request=0x7f040006;
-        public static final int yes=0x7f04000b;
+        public static final int request=0x7f040007;
+        public static final int yes=0x7f04000c;
     }
 }
