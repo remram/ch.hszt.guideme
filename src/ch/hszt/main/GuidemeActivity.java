@@ -105,24 +105,7 @@ public class GuidemeActivity extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		ConnectivityManager connMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (! (connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected())) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(R.string.network_alert)
-			.setMessage(R.string.network_failure).setCancelable(true)
-			.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-				}
-			}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.cancel();
-					finish();
-				}
-			});
-			AlertDialog alert = builder.create();
-			alert.show();
-		}
+
 		placeList = new ArrayList<Place>();
 		sortedRoutes = new TreeMap<Integer, ArrayList<GeoPoint>>();
 		geoPointList = new ArrayList<GeoPoint>();
@@ -154,9 +137,28 @@ public class GuidemeActivity extends MapActivity {
 	 */
 	@Override
 	public void onResume() {
-		super.onResume();	
-
-		if (!locationMgr.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+		super.onResume();
+		if (! (checkNetworkStatus())) {
+			ConnectivityManager connMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+			if (! (connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected())) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.network_alert)
+				.setMessage(R.string.network_failure).setCancelable(true)
+				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+					}
+				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+						finish();
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+			}
+		}
+		if ( checkNetworkStatus() &&  !locationMgr.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(R.string.alert)
 			.setMessage(R.string.message).setCancelable(true)
@@ -173,18 +175,17 @@ public class GuidemeActivity extends MapActivity {
 			AlertDialog alert = builder.create();
 			alert.show();
 		} 
-		if (checkNetworkStatus()) {
-			{
-				whereAmI.enableMyLocation();
-				whereAmI.getMyLocation();
-				whereAmI.runOnFirstFix(new Runnable() {
-					public void run() {
-						mapController.setCenter(whereAmI.getMyLocation());
-						latitude = whereAmI.getMyLocation().getLatitudeE6()/1E6;	//required if this value is not actual, the pos from new-york is given back !!
-						longitude = whereAmI.getMyLocation().getLongitudeE6()/1E6;	//required if this value is not actual, the pos from new-york is given back !!
-					}
-				});
-			}
+//		else {
+			if (checkNetworkStatus()) {
+			whereAmI.enableMyLocation();
+			whereAmI.getMyLocation();
+			whereAmI.runOnFirstFix(new Runnable() {
+				public void run() {
+					mapController.setCenter(whereAmI.getMyLocation());
+					latitude = whereAmI.getMyLocation().getLatitudeE6()/1E6;	//required if this value is not actual, the pos from new-york is given back !!
+					longitude = whereAmI.getMyLocation().getLongitudeE6()/1E6;	//required if this value is not actual, the pos from new-york is given back !!
+				}
+			});
 		}
 	}
 
