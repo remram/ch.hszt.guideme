@@ -157,6 +157,23 @@ public class GuidemeActivity extends MapActivity {
 				AlertDialog alert = builder.create();
 				alert.show();
 			}
+			else if (! (connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected())) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.network_alert)
+				.setMessage(R.string.network_failure).setCancelable(true)
+				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+					}
+				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+						finish();
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+			}
 		}
 		if ( checkNetworkStatus() &&  !locationMgr.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
