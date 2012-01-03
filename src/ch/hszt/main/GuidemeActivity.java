@@ -224,6 +224,8 @@ public class GuidemeActivity extends MapActivity {
 				showDialog(CURRENT_MESSAGE_INFO);
 			}			
 			else {
+				latitude = whereAmI.getMyLocation().getLatitudeE6()/1E6;
+				longitude = whereAmI.getMyLocation().getLongitudeE6()/1E6;
 				placeList = searchPlaces();
 				if (placeList.equals(null)) {
 					setMessage(getString(R.string.no_connection));	// in case of no connection to google is possible
@@ -236,8 +238,6 @@ public class GuidemeActivity extends MapActivity {
 						setMessage(getString(R.string.no_places));	// in case no places had been found
 					}
 					
-					latitude = whereAmI.getMyLocation().getLatitudeE6()/1E6;
-					longitude = whereAmI.getMyLocation().getLongitudeE6()/1E6;
 					gpList = getAllFoundPlaces();
 					if (! (gpList.equals(null)) ) {
 						for (GeoPoint point : gpList) {		
@@ -276,7 +276,7 @@ public class GuidemeActivity extends MapActivity {
 					}
 
 					else {
-						setMessage(getString(R.string.no_ways_available));	// in case no ways could be calculated. No Waypoints availabe..
+						setMessage(getString(R.string.no_ways_available));	/* in case no ways could be calculated. No Waypoints availabe */
 						showDialog(CURRENT_MESSAGE_INFO);
 					}
 				}
