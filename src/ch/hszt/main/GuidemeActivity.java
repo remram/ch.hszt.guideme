@@ -80,8 +80,6 @@ public class GuidemeActivity extends MapActivity {
 
 	private GooglePlaceOverlay itemizedoverlay ;
 
-	private MapOverlay mapOverlay;
-
 	private LocationManager locationMgr = null;
 
 	private Button placeRequst;
@@ -116,10 +114,6 @@ public class GuidemeActivity extends MapActivity {
 		mapController = mapView.getController();
 		mapController.setZoom(zoomLevel);
 
-		whereAmI = new MyCustomLocationOverlay(this, mapView);
-		mapView.getOverlays().add(whereAmI);
-		mapView.postInvalidate();
-
 		locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 		placeRequst = (Button) findViewById(R.id.button);
@@ -130,6 +124,10 @@ public class GuidemeActivity extends MapActivity {
 		overlayList = mapView.getOverlays();
 		drawable = this.getResources().getDrawable(R.drawable.blue_marker_a);
 		itemizedoverlay = new GooglePlaceOverlay(drawable);
+		
+		whereAmI = new MyCustomLocationOverlay(this, mapView);
+		mapView.getOverlays().add(whereAmI);
+		mapView.postInvalidate();
 	}
 
 	/**
@@ -219,6 +217,7 @@ public class GuidemeActivity extends MapActivity {
 			drawable = mapView.getResources().getDrawable(R.drawable.blue_marker_a);
 			itemizedoverlay = new GooglePlaceOverlay(drawable);
 			mapView.getOverlays().add(whereAmI);
+			MapOverlay mapOverlay = null;
 
 			if (! (checkNetworkStatus()) ) {	
 				showDialog(CURRENT_MESSAGE_INFO);
@@ -249,19 +248,19 @@ public class GuidemeActivity extends MapActivity {
 							sortedRoutes.put(distance, geoPointList);
 						}
 
-						int counter = 0;
 						Collection collection = sortedRoutes.values();
 						Iterator iterator = collection.iterator();	
 						Set keySet = sortedRoutes.keySet();
 						Integer [] keys = new Integer [keySet.size()];
 						keySet.toArray(keys);
+
 						for (int i = 0; i < keys.length; i++) {
 							geoPointList = sortedRoutes.get(keys[i]);
-							if (counter == 0) {
+							if (i == 0) {
 								mapOverlay = new MapOverlay(geoPointList, Color.GREEN, mapView );
 							}
 
-							else if (counter == 1) {
+							else if (i == 1) {
 								mapOverlay = new MapOverlay(geoPointList, Color.rgb(255, 165, 0), mapView);
 							}		
 
@@ -270,7 +269,7 @@ public class GuidemeActivity extends MapActivity {
 							}
 
 							mapView.getOverlays().add(mapOverlay);
-							counter++;
+							mapView.postInvalidate();
 						}
 
 					}

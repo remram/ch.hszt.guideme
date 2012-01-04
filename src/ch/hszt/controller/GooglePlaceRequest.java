@@ -47,7 +47,7 @@ public class GooglePlaceRequest {
 				"location=" + latitude + "," + longitude +
 				"&radius=" + radius +
 				"&client=" + clientId +
-				"&type=" + type +
+//				"&type=" + type +
 				"&sensor=" + sensor +
 				"&key=" + API_KEY;
 		return url;
