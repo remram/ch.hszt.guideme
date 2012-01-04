@@ -55,7 +55,7 @@ public class GuidemeActivity extends MapActivity {
 	 */	
 	private final int CURRENT_MESSAGE_INFO = 0;
 
-	private boolean publicStationOnly = false;
+	private boolean publicStationOnly = true;
 
 	private int distance = 0;	
 
