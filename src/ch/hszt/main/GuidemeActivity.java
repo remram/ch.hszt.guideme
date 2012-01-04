@@ -49,13 +49,13 @@ import android.widget.TextView;
  *
  */
 public class GuidemeActivity extends MapActivity {
-	
+
 	/**
 	 * initial parameter
 	 */	
 	private final int CURRENT_MESSAGE_INFO = 0;
 
-	private boolean publicStationOnly = true;
+	private boolean publicStationOnly = false;
 
 	private int distance = 0;	
 
@@ -124,7 +124,7 @@ public class GuidemeActivity extends MapActivity {
 		overlayList = mapView.getOverlays();
 		drawable = this.getResources().getDrawable(R.drawable.blue_marker_a);
 		itemizedoverlay = new GooglePlaceOverlay(drawable);
-		
+
 		whereAmI = new MyCustomLocationOverlay(this, mapView);
 		mapView.getOverlays().add(whereAmI);
 		mapView.postInvalidate();
@@ -190,8 +190,8 @@ public class GuidemeActivity extends MapActivity {
 			AlertDialog alert = builder.create();
 			alert.show();
 		} 
-//		else {
-			if (checkNetworkStatus()) {
+		//		else {
+		if (checkNetworkStatus()) {
 			whereAmI.enableMyLocation();
 			whereAmI.getMyLocation();
 			whereAmI.runOnFirstFix(new Runnable() {
@@ -236,7 +236,7 @@ public class GuidemeActivity extends MapActivity {
 					if (getMessage().equals(null)) {
 						setMessage(getString(R.string.no_places));	// in case no places had been found
 					}
-					
+
 					gpList = getAllFoundPlaces();
 					if (! (gpList.equals(null)) ) {
 						for (GeoPoint point : gpList) {		
@@ -244,34 +244,41 @@ public class GuidemeActivity extends MapActivity {
 							OverlayItem overlayitem = new OverlayItem(geoPoint, "" ,"");
 							itemizedoverlay.addOverlay(overlayitem);
 							overlayList.add(itemizedoverlay);
+
 							geoPointList = getWayPoints(latitude, longitude, (point.getLatitudeE6()/1E6), (point.getLongitudeE6()/1E6));					
-							sortedRoutes.put(distance, geoPointList);
-						}
-
-						Collection collection = sortedRoutes.values();
-						Iterator iterator = collection.iterator();	
-						Set keySet = sortedRoutes.keySet();
-						Integer [] keys = new Integer [keySet.size()];
-						keySet.toArray(keys);
-
-						for (int i = 0; i < keys.length; i++) {
-							geoPointList = sortedRoutes.get(keys[i]);
-							if (i == 0) {
-								mapOverlay = new MapOverlay(geoPointList, Color.GREEN, mapView );
+							if (geoPointList.equals(null))
+							{
+								setMessage(getString(R.string.no_places));	// in case of no connection to google is possible
+								showDialog(CURRENT_MESSAGE_INFO);
 							}
-
-							else if (i == 1) {
-								mapOverlay = new MapOverlay(geoPointList, Color.rgb(255, 165, 0), mapView);
-							}		
-
 							else {
-								mapOverlay = new MapOverlay(geoPointList, Color.RED, mapView);
+								sortedRoutes.put(distance, geoPointList);
 							}
 
-							mapView.getOverlays().add(mapOverlay);
-							mapView.postInvalidate();
-						}
+							Collection collection = sortedRoutes.values();
+							Iterator iterator = collection.iterator();	
+							Set keySet = sortedRoutes.keySet();
+							Integer [] keys = new Integer [keySet.size()];
+							keySet.toArray(keys);
 
+							for (int i = 0; i < keys.length; i++) {
+								geoPointList = sortedRoutes.get(keys[i]);
+								if (i == 0) {
+									mapOverlay = new MapOverlay(geoPointList, Color.GREEN, mapView );
+								}
+
+								else if (i == 1) {
+									mapOverlay = new MapOverlay(geoPointList, Color.rgb(255, 165, 0), mapView);
+								}		
+
+								else {
+									mapOverlay = new MapOverlay(geoPointList, Color.RED, mapView);
+								}
+
+								mapView.getOverlays().add(mapOverlay);
+								mapView.postInvalidate();
+							}
+						}
 					}
 
 					else {
@@ -282,7 +289,7 @@ public class GuidemeActivity extends MapActivity {
 			}
 		}
 	};
-	
+
 	/**
 	 * onPause methode
 	 */
@@ -354,12 +361,15 @@ public class GuidemeActivity extends MapActivity {
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "static-access" })
-	private ArrayList<GeoPoint> getWayPoints(double fromLat, double fromLng, double toLat, double toLng) {
+	private ArrayList<GeoPoint> getWayPoints(double fromLat, double fromLng, double toLat, double toLng) throws NullPointerException {
 		GoogleDirectionsRequest pgdr = new GoogleDirectionsRequest(fromLat, fromLng, toLat, toLng);
 		ArrayList<Location> locationList = new ArrayList<Location>();
 		ArrayList<GeoPoint> geoPointList = new ArrayList<GeoPoint>();
 		PolylineDecoder pd = new PolylineDecoder();
 		ArrayList<String> polylinepoints  = pgdr.searchGoogleDirections();
+
+		if (polylinepoints.isEmpty()) 
+			return null;
 
 		for (String string : polylinepoints) {
 			locationList.addAll(pd.decodePoly(string));
@@ -368,7 +378,6 @@ public class GuidemeActivity extends MapActivity {
 		for (Location location : locationList) {
 			geoPointList.add(new GeoPoint( ((int) location.getLatitude()), ((int) location.getLongitude())));
 		}
-
 		this.distance = pgdr.getDistance();
 
 		return geoPointList;		
