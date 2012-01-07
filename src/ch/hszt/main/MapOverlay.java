@@ -59,7 +59,7 @@ public class MapOverlay extends com.google.android.maps.Overlay{
 		paint.setStrokeWidth(3);
 	    paint.setAlpha(123);
 
-		for (int i = 0; i < this.geoPointList.size()-1; i++) {
+		for (int i = 0; i < this.geoPointList.size(); i++) {
 			Point point = new Point();
 			mapView.getProjection().toPixels(this.geoPointList.get(i), point);
 			x2 = point.x;
