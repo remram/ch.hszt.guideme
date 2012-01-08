@@ -215,9 +215,8 @@ public class GuidemeActivity extends MapActivity {
 	 * if button has been pushed, perform all steps in onClick method
 	 */
 	View.OnClickListener onclickListener = new View.OnClickListener() {
-		@SuppressWarnings({"rawtypes", "unchecked", "unused" })
+		
 		@Override
-
 		public void onClick(View v) {
 			if (! (checkNetworkStatus()) ) {	
 				showDialog(CURRENT_MESSAGE_INFO);

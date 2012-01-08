@@ -90,7 +90,6 @@ public class GooglePlaceRequest {
 				}
 				
 				if (status.equals("OK")) {
-//					overQueryLimit = false;
 					totalOkCounter++;
 					JSONArray jsonArray = completeJSONObj.getJSONArray("results");
 					JSONObject jsonObject = jsonArray.getJSONObject(0);
@@ -108,7 +107,7 @@ public class GooglePlaceRequest {
 					}
 				}
 
-
+				System.out.println(status);
 			} catch (MalformedURLException e) {
 			} catch (IOException e) {
 			} catch (JSONException e) {
