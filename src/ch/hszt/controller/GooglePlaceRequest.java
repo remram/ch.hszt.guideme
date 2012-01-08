@@ -26,8 +26,8 @@ public class GooglePlaceRequest {
 	private double latitude;
 	private double longitude;
 	private boolean overQueryLimit = true;
-	private int counter1 = 0;
-	private int counter2 = 0;
+	private int totalOverQueryCounter = 0;
+	private int totalOkCounter = 0;
 	private ArrayList<Place> placeList = new ArrayList<Place>();
 	
 	/**
@@ -86,12 +86,12 @@ public class GooglePlaceRequest {
 				
 				if (status.equals("OVER_QUERY_LIMIT")) {
 					overQueryLimit = true;
-					counter2++;
+					totalOverQueryCounter++;
 				}
 				
 				if (status.equals("OK")) {
 					overQueryLimit = false;
-					counter1++;
+					totalOkCounter++;
 					JSONArray jsonArray = completeJSONObj.getJSONArray("results");
 					JSONObject jsonObject = jsonArray.getJSONObject(0);
 
@@ -134,9 +134,9 @@ public class GooglePlaceRequest {
 				}
 			}
 			placeCounter ++;
-		} while ( (placeCounter < 61) && (placeList.size() < 8));
+		} while ( placeCounter < 61);
 		
-		System.out.println("total OVER_QUERY_LIMIT:" + counter1 + "\ttotal OK: " + counter2);
+		System.out.println("total OVER_QUERY_LIMIT:" + totalOverQueryCounter + "\ttotal OK: " + totalOkCounter);
 		System.out.println("Haltestellen gefunden:");
 		for (Place place : placeList) {	
 			System.out.println("--> "+ place.getName() + " " + place.getVicinity());
