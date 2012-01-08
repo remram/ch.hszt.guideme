@@ -25,7 +25,7 @@ public class GooglePlaceRequest {
 	private int radius = 60;
 	private double latitude;
 	private double longitude;
-	private boolean overQueryLimit = true;
+	private boolean statusOk = true;
 	private int totalOverQueryCounter = 0;
 	private int totalOkCounter = 0;
 	private ArrayList<Place> placeList = new ArrayList<Place>();
@@ -85,12 +85,12 @@ public class GooglePlaceRequest {
 				
 				
 				if (status.equals("OVER_QUERY_LIMIT")) {
-					overQueryLimit = true;
+					statusOk = false;
 					totalOverQueryCounter++;
 				}
 				
 				if (status.equals("OK")) {
-					overQueryLimit = false;
+//					overQueryLimit = false;
 					totalOkCounter++;
 					JSONArray jsonArray = completeJSONObj.getJSONArray("results");
 					JSONObject jsonObject = jsonArray.getJSONObject(0);
@@ -114,7 +114,7 @@ public class GooglePlaceRequest {
 			} catch (JSONException e) {
 			}
 			return pl;
-		} while (overQueryLimit);
+		} while (statusOk);
 	}
 	
 	/**
@@ -128,6 +128,7 @@ public class GooglePlaceRequest {
 		int placeCounter = 0;
 		do {
 			if (placeCounter < 61) {
+				
 				virtualPointList = search(vpl.get(placeCounter).getLatitude(), vpl.get(placeCounter).getLongitude());	
 				for (Place place : virtualPointList) {	
 					placeList.add(place);
